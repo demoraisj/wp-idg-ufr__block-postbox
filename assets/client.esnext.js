@@ -56,11 +56,6 @@ async function ufrSetPostBox(params) {
 		}
 	}
 
-	function strip(html) {
-		let doc = new DOMParser().parseFromString(html, 'text/html');
-		return doc.body.textContent.replaceAll('\n', ' ') || "";
-	}
-
 	const box = document.getElementById(boxID).querySelector('.box');
 	const boxTitle = box.querySelector('.title');
 	const boxExcerpt = box.querySelector('.excerpt');
@@ -82,9 +77,19 @@ async function ufrSetPostBox(params) {
 
 	if (embeddedImg) img = embeddedImg;
 	if (thumbnail) img = thumbnail;
-	if (!(postType === 'most-seen')) {
+	if (!(postType === 'most-seen') && !post) {
 		title = title.rendered;
 		excerpt = excerpt.rendered;
+	}
+
+	function strip(string) {
+		if (!string) return '';
+
+		string = string.replaceAll(/(<p>|<\/p>)/gm, '');
+		string = string.replaceAll(/(&lt;p>|&lt;\/p>)/gm, '');
+		string = string.replaceAll(/\n/gm, ' ');
+
+		return string;
 	}
 
 	const shareLinks = {
@@ -95,9 +100,9 @@ async function ufrSetPostBox(params) {
 
 	box.style.backgroundImage = `url(${img})`;
 	box.style.height = `${box.clientWidth}px`;
-	boxTitle.innerHTML = true ? title : '';
-	boxExcerpt.innerHTML = showExcerpt ? strip(excerpt) : '';
-	boxContent.style.height = `${box.clientWidth - boxShareBtn.clientWidth}px`;
+	boxTitle.innerHTML = (showTitle && title) ? title : '';
+	boxExcerpt.innerHTML = (showExcerpt && excerpt) ? strip(excerpt) : '';
+	boxContent.style.height = `${box.clientWidth - 57}px`;
 
 	boxShareFb.onclick = () => window.open(shareLinks.facebook, '_blank');
 	boxShareTt.onclick = () => window.open(shareLinks.twitter, '_blank');

@@ -120,18 +120,10 @@ $primary: #1351B4;
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center;
+		overflow: hidden;
 
 		&:hover {
 			filter: opacity(0.9);
-
-			&:after {
-				content: 'Ler mais ➜';
-				bottom: 10px;
-				right: 10px;
-				position: absolute;
-				font-weight: bold;
-				font-size: 115%;
-			}
 		}
 
 		.content {
@@ -140,7 +132,19 @@ $primary: #1351B4;
 			align-items: flex-end;
 
 			.text {
-				padding-left: 8px;
+				padding: 8px;
+				background: rgba(0, 0, 0, 0.6);
+				width: 100%;
+				color: white;
+
+				.title {
+					font-size: 125%;
+					font-weight: bold;
+				}
+
+				.excerpt {
+					//
+				}
 			}
 		}
 	}

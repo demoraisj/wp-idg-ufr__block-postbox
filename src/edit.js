@@ -23,8 +23,8 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 		postType,
 		postCategory,
 		postTag,
-		useBorder,
 		showExcerpt,
+		showTitle,
 		boxID,
 		postSelection,
 		post,
@@ -53,7 +53,7 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 		{ label: 'Escolher uma postagem manualmente', value: 'pick' },
 	];
 
-	if (!boxID) setAttributes({ boxID: `box-${uuid()}` })
+	if (!boxID) setAttributes({ boxID: `box-${uuid()}` });
 
 	useEffect(() => {
 		const optionsToGet = [
@@ -85,7 +85,7 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 
 			switch (postType) {
 				case 'most-seen':
-					path = ufrGlobals.siteUrl + '/wp-json/ufr/most-seen-posts'
+					path = '/ufr/most-seen-posts'
 					break;
 
 				case 'category':
@@ -98,17 +98,27 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 			}
 
 			apiFetch({ path }).then((res) => {
-                const options = res.map((item) => ({
-                    label: `${item.title.rendered} - ${new Date(item.date).toLocaleDateString()} - ${item.status === 'publish' ? 'Publicado' : 'Não-publicado'}`,
-                    value: item,
-                }));
+                const options = res.map((item) => {
+	                const value = {
+		                link: item.link ?? null,
+		                _embedded: item._embedded ?? null,
+		                thumbnail: item.thumbnail ?? null,
+		                excerpt: item.excerpt?.rendered ?? item?.excerpt ?? null,
+		                title: item.title?.rendered ?? item?.title ?? null,
+	                };
+
+					return {
+						label: `${item.title?.rendered ?? item.title} - ${new Date(item.date).toLocaleDateString()} - ${item.status === 'publish' ? 'Publicado' : 'Não-publicado'}`,
+						value: JSON.stringify(value),
+					}
+                });
 
                 setPostOptions(options);
 
 				setAttributes({ post: options[0].value });
             })
 		}
-	}, [postSelection]);
+	}, [postSelection, postType, postCategory, postTag]);
 
 	useEffect(() => {
 		if (!isSelected) {
@@ -117,11 +127,11 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 				postType,
 				postCategory,
 				postTag,
-				useBorder,
+				showTitle,
 				showExcerpt,
 				boxID,
 				postSelection,
-				post,
+				post: (postSelection === 'pick' && post) ? JSON.parse(post) : null,
 			});
 		}
 	}, [isSelected]);
@@ -190,16 +200,16 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 						<h3>Configurações Opcionais</h3>
 
 						<UFRCheckbox
-							label="Mostrar Resumo da Postagem"
-							checked={showExcerpt}
-							attr="showExcerpt"
+							label="Mostrar título da postagem"
+							checked={showTitle}
+							attr="showTitle"
 							setter={setAttributes}
 						/>
 
 						<UFRCheckbox
-							label="Envolver Caixa com uma Borda"
-							checked={useBorder}
-							attr="useBorder"
+							label="Mostrar Resumo da Postagem"
+							checked={showExcerpt}
+							attr="showExcerpt"
 							setter={setAttributes}
 						/>
 					</div>

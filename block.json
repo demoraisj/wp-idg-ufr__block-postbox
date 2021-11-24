@@ -30,14 +30,14 @@
 		"boxID": {
             "type": "string"
         },
-		"useBorder": {
-            "type": "boolean",
-            "default": false
-        },
 		"showExcerpt": {
             "type": "boolean",
             "default": true
         },
+		"showTitle": {
+			"type": "boolean",
+			"default": true
+		},
 		"post": {
             "type": "object"
         },

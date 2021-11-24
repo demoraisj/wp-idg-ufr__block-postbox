@@ -12,15 +12,18 @@ function _ufrSetPostBox() {
   _ufrSetPostBox = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(params) {
     var _embedded$wpFeatured, _embedded$wpFeatured$, _embedded$wpFeatured2, _embedded$wpFeatured3;
 
-    var postType, postCategory, postTag, showExcerpt, boxID, postSelection, showTitle, post, getPosts, _getPosts, strip, box, boxTitle, boxExcerpt, boxContent, boxShareBtn, boxShareFb, boxShareTt, boxShareWpp, targetPost, link, _embedded, thumbnail, excerpt, title, img, embeddedImg, alt, shareLinks;
+    var postType, postCategory, postTag, showExcerpt, boxID, postSelection, showTitle, post, getPosts, _getPosts, box, boxTitle, boxExcerpt, boxContent, boxShareBtn, boxShareFb, boxShareTt, boxShareWpp, targetPost, link, _embedded, thumbnail, excerpt, title, img, embeddedImg, alt, strip, shareLinks;
 
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            strip = function _strip(html) {
-              var doc = new DOMParser().parseFromString(html, 'text/html');
-              return doc.body.textContent.replaceAll('\n', ' ') || "";
+            strip = function _strip(string) {
+              if (!string) return '';
+              string = string.replaceAll(/(<p>|<\/p>)/gm, '');
+              string = string.replaceAll(/(&lt;p>|&lt;\/p>)/gm, '');
+              string = string.replaceAll(/\n/gm, ' ');
+              return string;
             };
 
             _getPosts = function _getPosts3() {
@@ -173,7 +176,7 @@ function _ufrSetPostBox() {
             if (embeddedImg) img = embeddedImg;
             if (thumbnail) img = thumbnail;
 
-            if (!(postType === 'most-seen')) {
+            if (!(postType === 'most-seen') && !post) {
               title = title.rendered;
               excerpt = excerpt.rendered;
             }
@@ -185,9 +188,9 @@ function _ufrSetPostBox() {
             };
             box.style.backgroundImage = "url(".concat(img, ")");
             box.style.height = "".concat(box.clientWidth, "px");
-            boxTitle.innerHTML = true ? title : '';
-            boxExcerpt.innerHTML = showExcerpt ? strip(excerpt) : '';
-            boxContent.style.height = "".concat(box.clientWidth - boxShareBtn.clientWidth, "px");
+            boxTitle.innerHTML = showTitle && title ? title : '';
+            boxExcerpt.innerHTML = showExcerpt && excerpt ? strip(excerpt) : '';
+            boxContent.style.height = "".concat(box.clientWidth - 57, "px");
 
             boxShareFb.onclick = function () {
               return window.open(shareLinks.facebook, '_blank');
