@@ -48,12 +48,6 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 		{ label: 'Escolher uma postagem manualmente', value: 'pick' },
 	];
 
-	const sizeOptions = [
-		{ label: 'Pequeno', value: 'first' },
-		{ label: 'Médio', value: 'last' },
-		{ label: 'Escolher uma postagem manualmente', value: 'pick' },
-	];
-
 	if (!boxID) setAttributes({ boxID: `box-${uuid()}` });
 
 	useEffect(() => {
@@ -116,7 +110,7 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 
                 setPostOptions(options);
 
-				setAttributes({ post: options[0].value });
+				if (!post) setAttributes({ post: options[0].value });
             })
 		}
 	}, [postSelection, postType, postCategory, postTag]);

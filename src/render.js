@@ -1,4 +1,4 @@
-import {Fragment} from "react";
+import { Fragment } from "react";
 
 /**
  * Componente para renderizar o bloco.
@@ -57,9 +57,9 @@ export default function Render({ preview, attributes }) {
 							boxID: '${boxID}',
 							showTitle: ${showTitle},
 							showExcerpt: ${showExcerpt},
+							showShareBtn: ${showShareBtn},
 							postSelection: '${postSelection}',
 							post: ${post},
-							showShareBtn: ${showShareBtn},
 						})
 					});
 				`}

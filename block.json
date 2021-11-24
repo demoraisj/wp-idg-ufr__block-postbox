@@ -43,7 +43,7 @@
             "default": true
         },
 		"post": {
-            "type": "object"
+            "type": "string"
         },
 		"postSelection": {
 			"type": "string",
