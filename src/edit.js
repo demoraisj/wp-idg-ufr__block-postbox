@@ -27,6 +27,7 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 		showTitle,
 		boxID,
 		postSelection,
+		showShareBtn,
 		post,
 	} = attributes;
 
@@ -128,6 +129,7 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 				postCategory,
 				postTag,
 				showTitle,
+				showShareBtn,
 				showExcerpt,
 				boxID,
 				postSelection,
@@ -210,6 +212,13 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 							label="Mostrar Resumo da Postagem"
 							checked={showExcerpt}
 							attr="showExcerpt"
+							setter={setAttributes}
+						/>
+
+						<UFRCheckbox
+							label="Mostrar Botão para Compartilhar"
+							checked={showShareBtn}
+							attr="showShareBtn"
 							setter={setAttributes}
 						/>
 					</div>

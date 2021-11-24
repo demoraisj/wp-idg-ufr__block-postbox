@@ -10,9 +10,9 @@ function ufrSetPostBox(_x) {
 
 function _ufrSetPostBox() {
   _ufrSetPostBox = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(params) {
-    var _embedded$wpFeatured, _embedded$wpFeatured$, _embedded$wpFeatured2, _embedded$wpFeatured3;
+    var _embedded$wpFeatured, _embedded$wpFeatured$;
 
-    var postType, postCategory, postTag, showExcerpt, boxID, postSelection, showTitle, post, getPosts, _getPosts, box, boxTitle, boxExcerpt, boxContent, boxShareBtn, boxShareFb, boxShareTt, boxShareWpp, targetPost, link, _embedded, thumbnail, excerpt, title, img, embeddedImg, alt, strip, shareLinks;
+    var postType, postCategory, postTag, showExcerpt, boxID, postSelection, showTitle, showShareBtn, post, getPosts, _getPosts, box, boxTitle, boxExcerpt, boxContent, boxShareFb, boxShareTt, boxShareWpp, targetPost, link, _embedded, thumbnail, excerpt, title, img, embeddedImg, strip, shareLinks;
 
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
@@ -140,39 +140,53 @@ function _ufrSetPostBox() {
               return _getPosts.apply(this, arguments);
             };
 
-            postType = params.postType, postCategory = params.postCategory, postTag = params.postTag, showExcerpt = params.showExcerpt, boxID = params.boxID, postSelection = params.postSelection, showTitle = params.showTitle, post = params.post;
+            postType = params.postType, postCategory = params.postCategory, postTag = params.postTag, showExcerpt = params.showExcerpt, boxID = params.boxID, postSelection = params.postSelection, showTitle = params.showTitle, showShareBtn = params.showShareBtn, post = params.post;
+            /**
+             * Faz o request e busca os posts baseado na escola de tipo, categoria e tag;
+             *
+             * @param postType
+             * @param postCategory
+             * @param postTag
+             * @param postSelection
+             * @return {Promise<any>}
+             */
+
             box = document.getElementById(boxID).querySelector('.box');
             boxTitle = box.querySelector('.title');
             boxExcerpt = box.querySelector('.excerpt');
             boxContent = box.querySelector('.content');
-            boxShareBtn = box.querySelector('.btn_wrap');
             boxShareFb = box.querySelector('.fa-facebook-f');
             boxShareTt = box.querySelector('.fa-twitter');
             boxShareWpp = box.querySelector('.fa-whatsapp');
 
             if (!(post !== null && post !== void 0)) {
-              _context2.next = 16;
+              _context2.next = 15;
               break;
             }
 
             _context2.t0 = post;
-            _context2.next = 19;
+            _context2.next = 18;
             break;
 
-          case 16:
-            _context2.next = 18;
+          case 15:
+            _context2.next = 17;
             return getPosts(postType, postCategory, postTag, postSelection);
 
-          case 18:
+          case 17:
             _context2.t0 = _context2.sent[0];
 
-          case 19:
+          case 18:
             targetPost = _context2.t0;
             link = targetPost.link, _embedded = targetPost._embedded, thumbnail = targetPost.thumbnail;
-            excerpt = targetPost.excerpt, title = targetPost.title;
+            excerpt = targetPost.excerpt, title = targetPost.title; // Placeholder
+
             img = ufrGlobals.themeUrl + '/assets/img/logo/ufr-bg.png';
             embeddedImg = _embedded ? (_embedded$wpFeatured = _embedded['wp:featuredmedia']) === null || _embedded$wpFeatured === void 0 ? void 0 : (_embedded$wpFeatured$ = _embedded$wpFeatured[0]) === null || _embedded$wpFeatured$ === void 0 ? void 0 : _embedded$wpFeatured$.source_url : undefined;
-            alt = _embedded ? (_embedded$wpFeatured2 = _embedded['wp:featuredmedia']) === null || _embedded$wpFeatured2 === void 0 ? void 0 : (_embedded$wpFeatured3 = _embedded$wpFeatured2[0]) === null || _embedded$wpFeatured3 === void 0 ? void 0 : _embedded$wpFeatured3.alt_text : '';
+            /**
+             * Existe uma diferença entre os dados obtidos, alguns atributos mudam quando obtidos por 'mais vistos' ou outro modo.
+             * Estas condicionais garante que pagamos os atributos certos em cada caso. Seja verificando o caso ou verificando a existencia deles.
+             */
+
             if (embeddedImg) img = embeddedImg;
             if (thumbnail) img = thumbnail;
 
@@ -187,36 +201,52 @@ function _ufrSetPostBox() {
               whatsapp: "https://api.whatsapp.com/send?text=".concat(encodeURI(title + '\n' + link))
             };
             box.style.backgroundImage = "url(".concat(img, ")");
-            box.style.height = "".concat(box.clientWidth, "px");
             boxTitle.innerHTML = showTitle && title ? title : '';
             boxExcerpt.innerHTML = showExcerpt && excerpt ? strip(excerpt) : '';
-            boxContent.style.height = "".concat(box.clientWidth - 57, "px");
+            /**
+             * Padroniza os tamanhos dos boxes em relação a imagem de fundo.
+             *
+             * @type {string}
+             */
 
-            boxShareFb.onclick = function () {
-              return window.open(shareLinks.facebook, '_blank');
-            };
+            box.style.height = "".concat(box.clientWidth, "px");
+            /**
+             * Atribui a altura do boxContent para a altura total disponível do box, subtraindo o tamanho do botão de
+             * compartilhar quando este estiver sendo usado.
+             * Esta ação combinada com style.css fazem com que o texto fique no final (bottom) do box.
+             *
+             * @type {string}
+             */
 
-            boxShareTt.onclick = function () {
-              return window.open(shareLinks.twitter, '_blank');
-            };
+            boxContent.style.height = "".concat(box.clientWidth - (showShareBtn ? 57 : 0), "px");
 
-            boxShareWpp.onclick = function () {
-              return window.open(shareLinks.whatsapp, '_blank');
-            };
+            if (showShareBtn) {
+              boxShareFb.onclick = function () {
+                return window.open(shareLinks.facebook, '_blank');
+              };
 
-            boxShareFb.onauxclick = function () {
-              return window.open(shareLinks.facebook, '_blank');
-            };
+              boxShareTt.onclick = function () {
+                return window.open(shareLinks.twitter, '_blank');
+              };
 
-            boxShareTt.onauxclick = function () {
-              return window.open(shareLinks.twitter, '_blank');
-            };
+              boxShareWpp.onclick = function () {
+                return window.open(shareLinks.whatsapp, '_blank');
+              };
 
-            boxShareWpp.onauxclick = function () {
-              return window.open(shareLinks.whatsapp, '_blank');
-            };
+              boxShareFb.onauxclick = function () {
+                return window.open(shareLinks.facebook, '_blank');
+              };
 
-          case 40:
+              boxShareTt.onauxclick = function () {
+                return window.open(shareLinks.twitter, '_blank');
+              };
+
+              boxShareWpp.onauxclick = function () {
+                return window.open(shareLinks.whatsapp, '_blank');
+              };
+            }
+
+          case 33:
           case "end":
             return _context2.stop();
         }

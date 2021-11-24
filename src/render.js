@@ -15,6 +15,7 @@ export default function Render({ preview, attributes }) {
 		showExcerpt,
 		showTitle,
 		postSelection,
+		showShareBtn,
 		post,
 		boxID,
 	} = attributes;
@@ -24,15 +25,16 @@ export default function Render({ preview, attributes }) {
 			<div className="row" id={boxID}>
 				<div className="col">
 					<div className="br-card box">
-						<div className="btn_wrap">
-							<span>Compartilhar</span>
-							<div className="container">
-								<i className="fab fa-facebook-f" />
-								<i className="fab fa-twitter" />
-								<i className="fab fa-whatsapp" />
+						{showShareBtn &&
+							<div className="btn_wrap">
+								<span>Compartilhar</span>
+								<div className="container">
+									<i className="fab fa-facebook-f" />
+									<i className="fab fa-twitter" />
+									<i className="fab fa-whatsapp" />
+								</div>
 							</div>
-						</div>
-
+						}
 						<div className="content">
 							<span className="text">
 								<span className="title" />
@@ -57,6 +59,7 @@ export default function Render({ preview, attributes }) {
 							showExcerpt: ${showExcerpt},
 							postSelection: '${postSelection}',
 							post: ${post},
+							showShareBtn: ${showShareBtn},
 						})
 					});
 				`}

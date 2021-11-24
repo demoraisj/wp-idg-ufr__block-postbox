@@ -7,9 +7,19 @@ async function ufrSetPostBox(params) {
 		boxID,
 		postSelection,
 		showTitle,
+		showShareBtn,
 		post,
 	} = params;
 
+	/**
+	 * Faz o request e busca os posts baseado na escola de tipo, categoria e tag;
+	 *
+	 * @param postType
+	 * @param postCategory
+	 * @param postTag
+	 * @param postSelection
+	 * @return {Promise<any>}
+	 */
 	async function getPosts(postType, postCategory, postTag, postSelection) {
 		const postsUrl = ufrGlobals.siteUrl + `/wp-json/wp/v2/posts?_embed=&_locale=user&per_page=1`
 
@@ -60,7 +70,6 @@ async function ufrSetPostBox(params) {
 	const boxTitle = box.querySelector('.title');
 	const boxExcerpt = box.querySelector('.excerpt');
 	const boxContent = box.querySelector('.content');
-	const boxShareBtn = box.querySelector('.btn_wrap');
 	const boxShareFb = box.querySelector('.fa-facebook-f');
 	const boxShareTt = box.querySelector('.fa-twitter');
 	const boxShareWpp = box.querySelector('.fa-whatsapp');
@@ -70,11 +79,15 @@ async function ufrSetPostBox(params) {
 	const { link, _embedded, thumbnail } = targetPost;
 	let { excerpt, title } = targetPost;
 
+	// Placeholder
 	let img = ufrGlobals.themeUrl + '/assets/img/logo/ufr-bg.png';
 
 	const embeddedImg = _embedded ? _embedded['wp:featuredmedia']?.[0]?.source_url : undefined;
-	const alt = _embedded ? _embedded['wp:featuredmedia']?.[0]?.alt_text : '';
 
+	/**
+	 * Existe uma diferença entre os dados obtidos, alguns atributos mudam quando obtidos por 'mais vistos' ou outro modo.
+	 * Estas condicionais garante que pagamos os atributos certos em cada caso. Seja verificando o caso ou verificando a existencia deles.
+	 */
 	if (embeddedImg) img = embeddedImg;
 	if (thumbnail) img = thumbnail;
 	if (!(postType === 'most-seen') && !post) {
@@ -99,16 +112,32 @@ async function ufrSetPostBox(params) {
 	}
 
 	box.style.backgroundImage = `url(${img})`;
-	box.style.height = `${box.clientWidth}px`;
 	boxTitle.innerHTML = (showTitle && title) ? title : '';
 	boxExcerpt.innerHTML = (showExcerpt && excerpt) ? strip(excerpt) : '';
-	boxContent.style.height = `${box.clientWidth - 57}px`;
 
-	boxShareFb.onclick = () => window.open(shareLinks.facebook, '_blank');
-	boxShareTt.onclick = () => window.open(shareLinks.twitter, '_blank');
-	boxShareWpp.onclick = () => window.open(shareLinks.whatsapp, '_blank');
+	/**
+	 * Padroniza os tamanhos dos boxes em relação a imagem de fundo.
+	 *
+	 * @type {string}
+	 */
+	box.style.height = `${box.clientWidth}px`;
 
-	boxShareFb.onauxclick = () => window.open(shareLinks.facebook, '_blank');
-	boxShareTt.onauxclick = () => window.open(shareLinks.twitter, '_blank');
-	boxShareWpp.onauxclick = () => window.open(shareLinks.whatsapp, '_blank');
+	/**
+	 * Atribui a altura do boxContent para a altura total disponível do box, subtraindo o tamanho do botão de
+	 * compartilhar quando este estiver sendo usado.
+	 * Esta ação combinada com style.css fazem com que o texto fique no final (bottom) do box.
+	 *
+	 * @type {string}
+	 */
+	boxContent.style.height = `${box.clientWidth - (showShareBtn ? 57 : 0)}px`;
+
+	if (showShareBtn) {
+		boxShareFb.onclick = () => window.open(shareLinks.facebook, '_blank');
+		boxShareTt.onclick = () => window.open(shareLinks.twitter, '_blank');
+		boxShareWpp.onclick = () => window.open(shareLinks.whatsapp, '_blank');
+
+		boxShareFb.onauxclick = () => window.open(shareLinks.facebook, '_blank');
+		boxShareTt.onauxclick = () => window.open(shareLinks.twitter, '_blank');
+		boxShareWpp.onauxclick = () => window.open(shareLinks.whatsapp, '_blank');
+	}
 }

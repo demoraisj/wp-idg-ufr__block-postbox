@@ -38,6 +38,10 @@
 			"type": "boolean",
 			"default": true
 		},
+		"showShareBtn": {
+            "type": "boolean",
+            "default": true
+        },
 		"post": {
             "type": "object"
         },
