@@ -76,6 +76,12 @@ async function ufrSetPostBox(params) {
 
 	let targetPost = post ?? (await getPosts(postType, postCategory, postTag, postSelection))[0];
 
+	if (!targetPost) {
+		box.innerHTML = '<span class="not-found">Nenhum post encontrado.</span>';
+
+		return;
+	}
+
 	const { link, _embedded, thumbnail } = targetPost;
 	let { excerpt, title } = targetPost;
 
