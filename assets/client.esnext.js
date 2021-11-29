@@ -47,20 +47,20 @@ async function ufrSetPostBox(params) {
 			case 'category':
 				switch (postSelection) {
 					case 'first':
-						return (await fetch(postsUrl + `&categories=${postCategory}?quantity=1`)).json();
+						return (await fetch(postsUrl + `&categories=${postCategory}&quantity=1`)).json();
 
 					case 'last':
-						return (await fetch(postsUrl + `&categories=${postCategory}quantity=1&order=asc`)).json();
+						return (await fetch(postsUrl + `&categories=${postCategory}&quantity=1&order=asc`)).json();
 				}
 				break;
 
 			case 'tag':
 				switch (postSelection) {
 					case 'first':
-						return (await fetch(postsUrl + `&tags=${postTag}?quantity=1`)).json();
+						return (await fetch(postsUrl + `&tags=${postTag}&quantity=1`)).json();
 
 					case 'last':
-						return (await fetch(postsUrl + `&tags=${postTag}?quantity=1&order=asc`)).json();
+						return (await fetch(postsUrl + `&tags=${postTag}&quantity=1&order=asc`)).json();
 				}
 				break;
 		}
