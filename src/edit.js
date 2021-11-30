@@ -53,16 +53,18 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 	useEffect(() => {
 		const optionsToGet = [
 			{
-                path: '/wp/v2/categories',
-                set: setCategoryOptions,
-            },
-            {
-                path: '/wp/v2/tags',
-                set: setTagOptions,
-            },
-        ];
+				attr: 'postCategory',
+				path: '/wp/v2/categories',
+				set: setCategoryOptions,
+			},
+			{
+				attr: 'postTag',
+				path: '/wp/v2/tags',
+				set: setTagOptions,
+			},
+		];
 
-		optionsToGet.forEach(({ path, set }) => {
+		optionsToGet.forEach(({ path, set, attr }) => {
 			apiFetch({ path }).then((res) => {
 				const options = res.map((item) => ({
 					label: item.name,
@@ -73,6 +75,11 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 			})
 		});
 	}, []);
+
+	useEffect(() => {
+		if (postType === 'category' && !postCategory) setAttributes({ postCategory: categoryOptions[0].value });
+		if (postType === 'tag' && !postTag) setAttributes({ postTag: tagOptions[0].value });
+	}, [postType, categoryOptions, tagOptions]);
 
 	useEffect(() => {
 		if (postSelection === 'pick') {
@@ -161,21 +168,19 @@ export default function edit({ attributes, setAttributes, isSelected }) {
 							setter={setAttributes}
 						/>
 
-						{postType === 'category' && <UFRSelect
-							label="Selecione a Categoria"
-							options={categoryOptions}
-							value={postCategory}
-							attr="postCategory"
-							setter={setAttributes}
-						/>}
+						{/* Nos selects abaixo, por alguma razão os componentes do pacote 'wp-idg-ufr__block-components' causam problemas e foram substituídos por lógica local. */}
 
-						{postType === 'tag' && <UFRSelect
-							label="Selecione a Tag"
-							options={tagOptions}
-							value={postTag}
-							attr="postTag"
-							setter={setAttributes}
-						/>}
+						{postType === 'category' &&
+							<select value={postCategory} onChange={(e) => setAttributes({ postCategory: e.target.value })}>
+								{categoryOptions.map(({ value, label }) => <option value={value}>{label}</option>)}
+							</select>
+						}
+
+						{postType === 'tag' &&
+							<select value={postTag} onChange={(e) => setAttributes({ postTag: e.target.value })}>
+								{tagOptions.map(({ value, label }) => <option value={value}>{label}</option>)}
+							</select>
+						}
 
 						<UFRSelect
 							label="Seleção de Postagem"

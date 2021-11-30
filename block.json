@@ -20,12 +20,10 @@
             "default": "all"
         },
 		"postCategory" : {
-            "type": "string",
-            "default": ""
+            "type": "string"
         },
 		"postTag" : {
-			"type": "string",
-			"default": ""
+			"type": "string"
 		},
 		"boxID": {
             "type": "string"
